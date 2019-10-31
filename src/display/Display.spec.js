@@ -53,3 +53,23 @@ describe("Test Lock/Ulock functionality", () => {
    //    expect(display.getByText(/unlocked/i));
    // });
 });
+
+describe("Test LED functionality", () => {
+   it("Uses 'red-led' class when 'locked' or 'closed'", () => {
+      const display = rtl.render(<Display locked={true} closed={true} />);
+      const locked = display.getByText(/locked/i);
+      const closed = display.getByText(/closed/i);
+
+      expect(locked).toHaveClass("red-led");
+      expect(closed).toHaveClass("red-led");
+   });
+
+   it("Uses 'green-led' class when 'unlocked' or 'open'", () => {
+      const display = rtl.render(<Display locked={false} closed={false} />);
+      const unlocked = display.getByText(/unlocked/i);
+      const open = display.getByText(/open/i);
+
+      expect(unlocked).toHaveClass("green-led");
+      expect(open).toHaveClass("green-led");
+   });
+});
