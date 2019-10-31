@@ -55,17 +55,33 @@ describe("Buttons' text changes to reflect the state the door will be in if clic
 });
 
 describe("Test Controls functionality", () => {
+   it("Close button is disabled if the gate is locked", () => {
+      const controls = rtl.render(<Controls closed={false} locked={true} />);
+      expect(controls.getByText(/close gate/i)).toBeDisabled();
+
+      controls.rerender(<Controls closed={false} locked={false} />);
+      expect(controls.getByText(/close gate/i)).not.toBeDisabled();
+   });
+
+   it("Lock button is disabled if the gate is open", () => {
+      const controls = rtl.render(<Controls closed={false} locked={false} />);
+      expect(controls.getByText(/lock gate/i)).toBeDisabled();
+
+      controls.rerender(<Controls closed={true} locked={false} />);
+      expect(controls.getByText(/lock gate/i)).not.toBeDisabled();
+   });
+
    it("Close button onclick triggers `toggleClosed` prop", () => {
       const closeToggleSpy = jest.fn();
-      const wrapper = rtl.render(<Controls toggleClosed={closeToggleSpy} />);
+      const controls = rtl.render(<Controls toggleClosed={closeToggleSpy} />);
 
-      testButton(wrapper.getByText(/close gate/i), closeToggleSpy);
+      testButton(controls.getByText(/close gate/i), closeToggleSpy);
    });
 
    it("Lock button onclick triggers `toggleLocked` prop", () => {
       const lockToggleSpy = jest.fn();
-      const wrapper = rtl.render(<Controls closed={true} toggleLocked={lockToggleSpy} />);
+      const controls = rtl.render(<Controls closed={true} toggleLocked={lockToggleSpy} />);
 
-      testButton(wrapper.getByText(/lock gate/i), lockToggleSpy);
+      testButton(controls.getByText(/lock gate/i), lockToggleSpy);
    });
 });
